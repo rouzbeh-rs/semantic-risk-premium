@@ -1,0 +1,39 @@
+Copyright (c) 2025 Rouzbeh Rezaei Sanjabi. All rights reserved.
+
+================================================================================
+SOFTWARE AND CODE (src/, *.py)
+================================================================================
+Licensed under PolyForm Noncommercial License 1.0.0
+
+You may:
+  - Use, copy, and modify the code for noncommercial purposes
+  - Use for academic research and personal projects
+
+You may not:
+  - Use the code for commercial purposes
+  - Sell or sublicense the code
+
+Full license: https://polyformproject.org/licenses/noncommercial/1.0.0/
+
+================================================================================
+ACADEMIC CONTENT (paper/)
+================================================================================
+Licensed under Creative Commons Attribution-NonCommercial 4.0 International
+(CC BY-NC 4.0)
+
+You may share and adapt with attribution for noncommercial purposes.
+
+Full license: https://creativecommons.org/licenses/by-nc/4.0/
+
+================================================================================
+DATA (*.csv, *.json)
+================================================================================
+Data files are derived from publicly available sources (UMA Protocol, Polymarket)
+and are provided without restriction for research reproducibility.
+
+================================================================================
+COMMERCIAL LICENSING
+================================================================================
+For commercial licensing inquiries, contact:
+  - [institutional email]
+  - [personal email]
