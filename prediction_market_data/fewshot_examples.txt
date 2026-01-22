@@ -1,0 +1,19 @@
+Example 1 (Variance: 0.02): "Will Trump say "Green new scam" during Pennsylvania rally on October 9?"
+
+Example 2 (Variance: 0.00): "Will Lando Norris win the Italian Grand Prix?"
+
+Example 3 (Variance: 0.00): "Will The Left wins 5% or more of vote in German election?"
+
+Example 4 (Variance: 0.00): "MLB: New York Mets vs. Atlanta Braves 2023-04-30"
+
+Example 5 (Variance: 0.00): "Will Ether Rock sell for over $600k at Sotheby’s?"
+
+Example 6 (Variance: 0.01): "Will Elon tweet less than 200 times November 15-22?"
+
+Example 7 (Variance: 0.00): "Will the highest temperature in NYC be between 35-36°F on February 21?"
+
+Example 8 (Variance: 0.01): "Pacers vs. Celtics"
+
+Example 9 (Variance: 0.00): "Will "Paddington in Peru" Opening Weekend Box Office be between $18-21m?"
+
+Example 10 (Variance: 0.21): "Will another party win the most seats in the 2024 Saskatchewan general election?"
