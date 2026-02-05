@@ -3,6 +3,7 @@ import numpy as np
 import statsmodels.formula.api as smf
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy.stats.mstats import winsorize
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -31,7 +32,15 @@ def prepare_data():
     df['log_volume'] = np.log(df['volume'] + 1)
     df['log_duration'] = np.log(df['duration_days'] + 1)
 
+    # 5. Winsorization at 1st and 99th percentiles
+    # As described in Section 4.4 of the paper
+    df['predicted_srs'] = winsorize(df['predicted_srs'], limits=[0.01, 0.01])
+    df['log_volume'] = winsorize(df['log_volume'], limits=[0.01, 0.01])
+    df['log_duration'] = winsorize(df['log_duration'], limits=[0.01, 0.01])
+    df['convergence_gap'] = winsorize(df['convergence_gap'], limits=[0.01, 0.01])
+
     print(f"Data Loaded: {len(df)} markets ready for testing.")
+    print(f"Winsorization applied at 1st and 99th percentiles.")
     return df
 
 def run_liquidity_test(df):
@@ -54,6 +63,8 @@ def run_liquidity_test(df):
     else:
         print(f"\n❌ Insignificant. SRS does not predict Volume (p={pval:.4f})")
 
+    return model
+
 def run_convergence_test(df):
     print("\n" + "="*60)
     print("TEST 2: CONVERGENCE FAILURE (Price Uncertainty)")
@@ -74,7 +85,7 @@ def run_convergence_test(df):
     else:
         print(f"\n❌ Insignificant. SRS does not predict Convergence (p={pval:.4f})")
 
-    return df
+    return model
 
 def plot_convergence(df):
     plt.figure(figsize=(10, 6))
@@ -84,10 +95,36 @@ def plot_convergence(df):
     plt.xlabel('Semantic Risk Score (SRS)', fontsize=12)
     plt.ylabel('Distance from Certainty (0=Clear, 0.5=Confused)', fontsize=12)
     plt.grid(True, alpha=0.3)
+    plt.savefig('convergence_plot.png', dpi=150, bbox_inches='tight')
     plt.show()
+    print("Plot saved as 'convergence_plot.png'")
+
+def print_paper_tables(liquidity_model, convergence_model):
+    """Print results formatted for the paper."""
+    print("\n" + "="*60)
+    print("FORMATTED RESULTS FOR PAPER")
+    print("="*60)
+    
+    print("\nTable 3: Liquidity Regression Results")
+    print("-"*60)
+    print(f"{'Variable':<20} {'Coef':>10} {'Std.Err':>10} {'t':>10} {'p-value':>10}")
+    print("-"*60)
+    for var in liquidity_model.params.index:
+        print(f"{var:<20} {liquidity_model.params[var]:>10.3f} {liquidity_model.bse[var]:>10.3f} {liquidity_model.tvalues[var]:>10.2f} {liquidity_model.pvalues[var]:>10.4f}")
+    print(f"\nN = {int(liquidity_model.nobs)}, R² = {liquidity_model.rsquared:.3f}")
+    
+    print("\n\nTable 4: Convergence Regression Results")
+    print("-"*60)
+    print(f"{'Variable':<20} {'Coef':>10} {'Std.Err':>10} {'t':>10} {'p-value':>10}")
+    print("-"*60)
+    for var in convergence_model.params.index:
+        print(f"{var:<20} {convergence_model.params[var]:>10.3f} {convergence_model.bse[var]:>10.3f} {convergence_model.tvalues[var]:>10.2f} {convergence_model.pvalues[var]:>10.4f}")
+    print(f"\nN = {int(convergence_model.nobs)}, R² = {convergence_model.rsquared:.3f}")
 
 # Run it
-df = prepare_data()
-run_liquidity_test(df)
-run_convergence_test(df)
-plot_convergence(df)
+if __name__ == "__main__":
+    df = prepare_data()
+    liquidity_model = run_liquidity_test(df)
+    convergence_model = run_convergence_test(df)
+    plot_convergence(df)
+    print_paper_tables(liquidity_model, convergence_model)
